@@ -81,3 +81,4 @@ ALTER TABLE `erp_jsp_exam`.`EMPLOYEE`
 		REFERENCES `erp_jsp_exam`.`DEPARTMENT` ( -- 부서
 			`DEPT_NO` -- 부서번호
 		);
+		

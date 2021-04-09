@@ -1,7 +1,9 @@
 desc employee;
 desc title;
 desc department ;
-
+drop table title;
+drop table department;
+drop table employee;
 insert into title values
 (1, '사장'),
 (2, '부장'),

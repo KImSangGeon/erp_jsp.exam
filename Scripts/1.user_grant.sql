@@ -5,3 +5,4 @@
 grant File 
 on *.*
 to 'user_erp_jsp_exam'@'localhost';
+

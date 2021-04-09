@@ -29,9 +29,10 @@ public class EmployeeImpl implements EmployeeDao {
 
 	@Override
 	public List<Employee> selectEmployeeByAll() {
-		String sql = "select EMP_NO, EMP_NAME, TNO, MANAGER, SALARY, DNO, HIREDATE from employee";
+		String sql = "select EMP_NO, EMP_NAME, TITLE_NO, TITLE_NAME, MANAGER, manager_name, SALARY, DEPT_NO, DEPT_NAME, FLOOR,HIREDATE from vw_full_employee";
 		try(PreparedStatement pstmt = con.prepareStatement(sql);
 				ResultSet rs = pstmt.executeQuery()){
+			System.out.println(pstmt);
 			if(rs.next()) {
 				List<Employee> list = new ArrayList<>();
 				do {
@@ -47,19 +48,34 @@ public class EmployeeImpl implements EmployeeDao {
 
 	private Employee getEmployee(ResultSet rs) throws SQLException {
 //		EMP_NO, EMP_NAME, TNO, MANAGER, SALARY, DNO, HIREDATE
+//		TITLE_NO, TITLE_NAME,  manager_name,  DEPT_NO, DEPT_NAME, FLOOR
 		int no = rs.getInt("EMP_NO");
 		String name = rs.getString("EMP_NAME");
-		Title tno = new Title(rs.getInt("TNO"));
+		Title tno = new Title(rs.getInt("title_No"));
 		Employee manager = new Employee(rs.getInt("MANAGER"));
 		int salary = rs.getInt("SALARY");
-		Department dno = new Department(rs.getInt("DNO"));
+		Department dno = new Department(rs.getInt("dept_no"));
 		Date hireDate = rs.getTimestamp("HIREDATE");
+		
+		try {
+			tno.setName(rs.getNString("TITLE_NAME"));
+		}catch(SQLException e) {}		
+		try {
+			manager.setName(rs.getString("manager_name"));
+		}catch(SQLException e) {}
+		try {
+			dno.setName(rs.getString("DEPT_NAME"));
+		}catch(SQLException e) {}
+		try {
+			dno.setFloor(rs.getInt("FLOOR"));
+		}catch(SQLException e) {}
+		
 		return new Employee(no, name, tno, manager, salary, dno, hireDate);
 	}
 
 	@Override
 	public Employee selectEmployeeByNo(Employee employee) {
-		String sql = "select EMP_NO, EMP_NAME, TNO, MANAGER, SALARY, DNO, HIREDATE from employee where emp_no = ?";
+		String sql = "select EMP_NO, EMP_NAME, TNO as TITLE_NO, MANAGER, SALARY, DNO as DEPT_NO, HIREDATE from employee where emp_no = ?";
 		try(PreparedStatement pstmt = con.prepareStatement(sql)){
 			pstmt.setInt(1, employee.getNo());
 			try(ResultSet rs = pstmt.executeQuery()){
@@ -76,6 +92,7 @@ public class EmployeeImpl implements EmployeeDao {
 	@Override
 	public int insertEmployee(Employee employee) {
 //		EMP_NO, EMP_NAME, TNO, MANAGER, SALARY, DNO, HIREDATE
+
 		String sql = "insert into employee values(?, ?, ?, ?, ?, ?, ?)";
 		try(PreparedStatement pstmt = con.prepareStatement(sql)){
 			pstmt.setInt(1, employee.getNo());
@@ -96,6 +113,7 @@ public class EmployeeImpl implements EmployeeDao {
 	public int updateEmployee(Employee employee) {
 		
 //		EMP_NAME, TNO, MANAGER, SALARY, DNO, HIREDATE, EMP_NO
+
 		String sql = "update employee set emp_name = ?, tno = ?, manager = ?, salary = ?, dno = ?, hiredate = ? where emp_no = ?";
 		try(PreparedStatement pstmt = con.prepareStatement(sql)){
 			pstmt.setString(1, employee.getName());

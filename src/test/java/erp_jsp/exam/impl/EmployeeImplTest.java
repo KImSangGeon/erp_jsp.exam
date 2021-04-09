@@ -33,6 +33,7 @@ public class EmployeeImplTest {
 		dao = EmployeeImpl.getInstance();
 		dao.setCon(con);
 	}
+	
 
 	@After
 	public void tearDown() throws Exception {
@@ -41,10 +42,11 @@ public class EmployeeImplTest {
 
 	@Test
 	public void test01SelectEmployeeByAll() {
+		
 		System.out.printf("%s%n", "testSelectEmployeeByAll");
 		List<Employee> list = dao.selectEmployeeByAll();
 		Assert.assertNotNull(list);
-		for(Employee e : list) {
+		for(Employee e : list) {		
 			System.out.println(e);
 		}
 	}

@@ -84,6 +84,18 @@ public class Employee {
 	public void setHireDate(Date hireDate) {
 		this.hireDate = hireDate;
 	}
+	public String ManagerList() {
+		if(manager.getName() == null) {
+			return "";
+		}
+		return String.format("%s(%d)", manager.getName(), manager.getNo());
+	}
+	public String TitleList() {
+		return String.format("%s", title.getName());		
+	}
+	public String DeptList() {
+		return String.format("%s", dept.getName());
+	}
 
 	@Override
 	public String toString() {
